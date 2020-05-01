@@ -68,3 +68,14 @@ $ ./scripts/up.sh
 ```
 $ ./.venv/tap-pipedrive/bin/tap-pipedrive -c tap-pipedrive-config.json --catalog pipedrive-catalog.json | ./.venv/target-postgres/bin/target-postgres --config target_postgres_config.json >> state.json
 ```
+
+## Start Redash to visualize data
+
+```
+$ ./scripts/redash-up.sh
+```
+
+Open http://127.0.0.1:5000
+
+- User: `admin@example.com`
+- Password: `password`

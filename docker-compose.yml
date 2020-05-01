@@ -10,3 +10,63 @@ services:
       POSTGRES_PASSWORD: password
     volumes:
       - ./volumes/data-warehouse/:/var/lib/postgresql/
+
+  redash:
+    image: redash/redash:8.0.2.b37747
+    command: server
+    ports:
+      - 5000:5000
+    environment:
+      REDASH_WEB_WORKERS: 4
+      PYTHONUNBUFFERED: 0
+      REDASH_LOG_LEVEL: INFO
+      REDASH_REDIS_URL: redis://redis:6379/0
+      POSTGRES_PASSWORD: password
+      REDASH_COOKIE_SECRET: secret
+      REDASH_SECRET_KEY: secret
+      REDASH_DATABASE_URL: postgresql://postgres:password@data-warehouse/redash
+
+  redash_scheduler:
+    image: redash/redash:8.0.2.b37747
+    command: scheduler
+    environment:
+      QUEUES: "celery"
+      WORKERS_COUNT: 1
+      PYTHONUNBUFFERED: 0
+      REDASH_LOG_LEVEL: INFO
+      REDASH_REDIS_URL: redis://redis:6379/0
+      POSTGRES_PASSWORD: password
+      REDASH_COOKIE_SECRET: secret
+      REDASH_SECRET_KEY: secret
+      REDASH_DATABASE_URL: postgresql://postgres:password@data-warehouse/redash
+
+  redash_scheduled_worker:
+    image: redash/redash:8.0.2.b37747
+    command: worker
+    environment:
+      QUEUES: "scheduled_queries,schemas"
+      WORKERS_COUNT: 1
+      PYTHONUNBUFFERED: 0
+      REDASH_LOG_LEVEL: INFO
+      REDASH_REDIS_URL: redis://redis:6379/0
+      POSTGRES_PASSWORD: password
+      REDASH_COOKIE_SECRET: secret
+      REDASH_SECRET_KEY: secret
+      REDASH_DATABASE_URL: postgresql://postgres:password@data-warehouse/redash
+
+  redash_adhoc_worker:
+    image: redash/redash:8.0.2.b37747
+    command: worker
+    environment:
+      QUEUES: "queries"
+      WORKERS_COUNT: 2
+      PYTHONUNBUFFERED: 0
+      REDASH_LOG_LEVEL: INFO
+      REDASH_REDIS_URL: redis://redis:6379/0
+      POSTGRES_PASSWORD: password
+      REDASH_COOKIE_SECRET: secret
+      REDASH_SECRET_KEY: secret
+      REDASH_DATABASE_URL: postgresql://postgres:password@data-warehouse/redash
+
+  redis:
+    image: redis:5.0-alpine
