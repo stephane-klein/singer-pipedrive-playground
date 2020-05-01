@@ -1,0 +1,12 @@
+version: "3.7"
+services:
+  data-warehouse:
+    image: postgres:12-alpine
+    ports:
+      - 5432:5432
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_DB: postgres
+      POSTGRES_PASSWORD: password
+    volumes:
+      - ./volumes/data-warehouse/:/var/lib/postgresql/

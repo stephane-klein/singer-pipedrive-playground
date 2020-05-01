@@ -1,0 +1,4 @@
+.venv/
+tap-pipedrive-config.json
+pipedrive-catalog.json
+./volumes/
