@@ -2,6 +2,8 @@
 
 Project status: Work in progress, see [issues](https://github.com/stephane-klein/singer-pipedrive-playground/issues)
 
+If you need Docker Image, look this project: [`stephane-klein/singer-pipedrive-postgresql-docker`](https://github.com/stephane-klein/singer-pipedrive-postgresql-docker)
+
 ## Prerequisites
 
 On macOS, install with Brew:
