@@ -65,9 +65,33 @@ $ ./.venv/target-postgres/bin/pip install singer-target-postgres==0.2.4
 $ ./scripts/up.sh
 ```
 
+## Execute Pipedrive importation to PostgreSQL
+
+The first time, when `state.json` don't exists, execute:
+
 ```
-$ ./.venv/tap-pipedrive/bin/tap-pipedrive -c tap-pipedrive-config.json --catalog pipedrive-catalog.json | ./.venv/target-postgres/bin/target-postgres --config target_postgres_config.json >> state.json
+$ ./.venv/tap-pipedrive/bin/tap-pipedrive \
+  -c tap-pipedrive-config.json \
+  --catalog pipedrive-catalog.json \
+  | ./.venv/target-postgres/bin/target-postgres \
+    --config target_postgres_config.json \
+    > state.json
 ```
+
+Next execute this commands to use `state.json` [Singer State](https://github.com/singer-io/getting-started/blob/master/docs/CONFIG_AND_STATE.md) file:
+
+```
+$ ./.venv/tap-pipedrive/bin/tap-pipedrive \
+  -c tap-pipedrive-config.json \
+  --catalog pipedrive-catalog.json \
+  -s state.json \
+  | ./.venv/target-postgres/bin/target-postgres \
+    --config target_postgres_config.json \
+    > state-target.json
+$ tail -1 state-target.json > state.json
+```
+
+Don't forget `tail...` line.
 
 ## Start Redash to visualize data
 
